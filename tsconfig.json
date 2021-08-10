@@ -1,0 +1,34 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "lib": ["es6"],
+        "module": "commonjs",
+        "strict": true,
+        "baseUrl": ".",
+        "rootDir": "src",
+        "outDir": "dist",
+        "paths": {},
+        "plugins": [
+            {
+                "transform": "mtasa-lua-utils/transformer",
+                "after": false,
+                "externalImports": true,
+                "globalExports": false
+            }
+        ],
+        "types": ["lua-types/5.1"],
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true
+    },
+    "tstl": {
+        "luaTarget": "5.1",
+        "noImplicitSelf": true,
+        "luaLibImport": "none",
+        "sourceMapTraceback": false,
+        "noHeader": true,
+        "bundleEntryPoints": ["src/server.ts", "src/client.ts", "src/utils.ts"]
+    }
+}
