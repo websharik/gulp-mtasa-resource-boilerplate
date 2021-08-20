@@ -28,22 +28,19 @@ function makeBundleFile(filePath, conf) {
     return new Promise(async (resolve, reject) => {
         try {
             let result = await tstl.transpileFiles([filePath], {
-                //original from tsconfig.json (wtf mix ts and tstl)
-                compilerOptions: {
-                    ...conf.compilerOptions,
-                },
-                tstl: {
-                    ...conf.tstl,
-                },
+                //conf is original from tsconfig.json
+                ...conf, //not so easy...
+                //mix ts and tstl
                 ...conf.tstl,
+                target: conf.compilerOptions.target,
+                module: conf.compilerOptions.module,
+                strict: conf.compilerOptions.strict,
                 plugins: [...conf.compilerOptions.plugins],
-                types: ['lua-types/5.1'],
+                types: [...conf.compilerOptions.types],
                 //if not . then put out to src
                 rootDir: '.',
                 //out path with same name from src
-                luaBundle: `${conf.compilerOptions.outDir}/${path
-                    .basename(filePath)
-                    .replace('.ts', '.lua')}`,
+                luaBundle: `${conf.compilerOptions.outDir}/${path.basename(filePath).replace('.ts', '.lua')}`,
                 //entry point
                 luaBundleEntry: filePath,
             })
