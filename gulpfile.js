@@ -6,7 +6,7 @@ const tsconfig = JSON.parse(
     fs.readFileSync(path.resolve('tsconfig.json'), { encoding: 'utf8' }),
 )
 const config = {
-    entypoints: [...tsconfig.tstl.bundleEntryPoints],
+    entypoints: [...tsconfig.bundleEntryPoints],
     out: tsconfig.compilerOptions.outDir || 'dist',
 }
 
@@ -32,7 +32,9 @@ function makeBundleFile(filePath, conf) {
                 ...conf, //not so easy...
                 //mix ts and tstl
                 ...conf.tstl,
+                //...conf.compilerOptions,//this break build
                 target: conf.compilerOptions.target,
+                //lib: conf.compilerOptions.lib,//this break build too
                 module: conf.compilerOptions.module,
                 strict: conf.compilerOptions.strict,
                 plugins: [...conf.compilerOptions.plugins],

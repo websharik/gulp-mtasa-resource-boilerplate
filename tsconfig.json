@@ -28,7 +28,7 @@
         "noImplicitSelf": true,
         "luaLibImport": "none",
         "sourceMapTraceback": false,
-        "noHeader": true,
-        "bundleEntryPoints": ["src/server.ts", "src/client.ts", "src/utils.ts"]
-    }
+        "noHeader": true
+    },
+    "bundleEntryPoints": ["src/server.ts", "src/client.ts", "src/utils.ts", "src/test.ts"]
 }
