@@ -1,13 +1,12 @@
 const fs = require('fs')
 const gulp = require('gulp')
 const path = require('path')
+const tstl = require('typescript-to-lua')
 
-const tsconfig = JSON.parse(
-    fs.readFileSync(path.resolve('tsconfig.json'), { encoding: 'utf8' }),
-)
+const tsconfig = tstl.parseConfigFileWithSystem('tsconfig.json')
 const config = {
-    entypoints: [...tsconfig.bundleEntryPoints],
-    out: tsconfig.compilerOptions.outDir || 'dist',
+    entypoints: [...tsconfig.raw.bundleEntryPoints],
+    out: tsconfig.raw.compilerOptions.outDir || 'dist',
 }
 
 //clear out dir
@@ -17,33 +16,21 @@ async function clean() {
 }
 
 //build ts
-const tstl = require('typescript-to-lua')
 function diagnosticsResults(result) {
-    result.diagnostics.filter(d => {
-        return [`Cannot find name 'https'`].indexOf(d.messageText) < 0
-    })
-    if (result.diagnostics.length > 0) console.log(result)
+    result = tstl.prepareDiagnosticForFormatting(result)
+    if (result.diagnostics.length > 0) {
+        console.error(`${result.diagnostics.length} errors found:`)
+        result.diagnostics.map((d) => {
+            console.error(d.messageText)
+        })
+    }
 }
 function makeBundleFile(filePath, conf) {
     return new Promise(async (resolve, reject) => {
         try {
             let result = await tstl.transpileFiles([filePath], {
-                //conf is original from tsconfig.json
-                ...conf, //not so easy...
-                //mix ts and tstl
-                ...conf.tstl,
-                //...conf.compilerOptions,//this break build
-                target: conf.compilerOptions.target,
-                //lib: conf.compilerOptions.lib,//this break build too
-                module: conf.compilerOptions.module,
-                strict: conf.compilerOptions.strict,
-                plugins: [...conf.compilerOptions.plugins],
-                types: [...conf.compilerOptions.types],
-                //if not . then put out to src
-                rootDir: '.',
-                //out path with same name from src
-                luaBundle: `${conf.compilerOptions.outDir}/${path.basename(filePath).replace('.ts', '.lua')}`,
-                //entry point
+                ...tsconfig.options,
+                luaBundle: `${tsconfig.raw.compilerOptions.outDir}/${path.basename(filePath).replace('.ts', '.lua')}`,
                 luaBundleEntry: filePath,
             })
             diagnosticsResults(result)

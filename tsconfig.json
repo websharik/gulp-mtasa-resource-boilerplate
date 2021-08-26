@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
-        "target": "ES6",
-        "lib": ["es6"],
+        "target": "esnext",
+        "lib": ["ES2015"],
         "module": "commonjs",
         "strict": true,
         "baseUrl": ".",
@@ -30,5 +30,5 @@
         "sourceMapTraceback": false,
         "noHeader": true
     },
-    "bundleEntryPoints": ["src/server.ts", "src/client.ts", "src/utils.ts", "src/test.ts"]
+    "bundleEntryPoints": ["src/test.ts","src/server.ts","src/client.ts"]
 }
