@@ -6,7 +6,6 @@
     <script src="vendor/lualib_bundle.lua" cache="false" type="shared"/>
 
     <!-- Compiled files -->
-    <script src="dist/utils.lua" type="server"/>
     <script src="dist/server.lua" type="server"/>
     <script src="dist/client.lua" type="client" cache="false"/>
 

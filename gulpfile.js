@@ -1,4 +1,3 @@
-const fs = require('fs')
 const gulp = require('gulp')
 const path = require('path')
 const tstl = require('typescript-to-lua')
@@ -25,12 +24,12 @@ function diagnosticsResults(result) {
         })
     }
 }
-function makeBundleFile(filePath, conf) {
+function makeBundleFile(filePath) {
     return new Promise(async (resolve, reject) => {
         try {
             let result = await tstl.transpileFiles([filePath], {
                 ...tsconfig.options,
-                luaBundle: `${tsconfig.raw.compilerOptions.outDir}/${path.basename(filePath).replace('.ts', '.lua')}`,
+                luaBundle: `${path.basename(filePath).replace('.ts', '.lua')}`,
                 luaBundleEntry: filePath,
             })
             diagnosticsResults(result)
@@ -43,7 +42,7 @@ function makeBundleFile(filePath, conf) {
 async function build() {
     return Promise.all(
         config.entypoints.map(entryPoint => {
-            return makeBundleFile(entryPoint, tsconfig)
+            return makeBundleFile(entryPoint)
         }),
     )
 }
